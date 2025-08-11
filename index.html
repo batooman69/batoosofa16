@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BATOO SOFA</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+    header, footer {
+      background: white;
+      padding: 0.8rem 1.25rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 120;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.35rem;
+      color: #0070f3;
+      cursor: pointer;
+    }
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    nav a {
+      margin-left: 12px;
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    nav a:hover {
+      color: #0070f3;
+    }
+    nav a.active {
+      font-weight: 700;
+      color: #0070f3;
+    }
+
+    /* auth buttons in header */
+    .auth-controls { display:flex; gap:0.5rem; align-items:center; }
+    .btn-auth {
+      background: transparent;
+      border: 1px solid #ddd;
+      padding: 0.4rem 0.7rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .btn-primary {
+      background: #0070f3;
+      color: #fff;
+      border: none;
+    }
+
+    .hero {
+      background-image: url("sofa.jpg");
+      background-size: cover;
+      background-position: center;
+      height: 100vh; /* 화면 높이 100% */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 2rem;
+      font-weight: bold;
+      position: relative;
+      cursor: pointer;
+      text-align: center;
+      padding: 0 1rem;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.4);
+      z-index: 0;
+    }
+    .hero span {
+      position: relative;
+      z-index: 1;
+    }
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 2rem;
+      min-height: 70vh;
+    }
+    /* 바투 소파 소개 섹션 사진 스타일 */
+    .intro-section {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 3rem;
+    }
+    .intro-text {
+      flex: 1 1 320px;
+      min-width: 560px;
+      font-size: 2.2rem;
+      line-height: 3.2;
+      color: #222;
+      max-width: 1000px;
+    }
+    .intro-image {
+      flex: 1 1 1200px;
+      max-width: 1200px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+      border-radius: 15px;
+      overflow: hidden;
+    }
+    .intro-image img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 15px;
+    }
+    /* 제품 소개 */
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+    .product {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      display:flex;
+      flex-direction:column;
+      transition: box-shadow 0.3s;
+      min-height: 480px; /* 기존 420px → 480px로 높이 증가 */
+    }
+    .product:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .product img {
+      width: 100%;
+      height: 280px; /* 기존 250px → 280px로 높이 증가 */
+      object-fit: cover;
+      display:block;
+    }
+    .product .info {
+      padding: 1rem;
+      flex:1;
+      display:flex;
+      flex-direction:column;
+    }
+    .product .info h4 {
+      margin: 0 0 0.5rem;
+      font-size: 1.25rem;
+      color: #0070f3;
+    }
+    .product .info p {
+      margin: 0 0 1rem;
+      color: gray;
+      font-weight:600;
+      font-size: 1.1rem;
+    }
+    .product .info button {
+      background: #0070f3;
+      color: white;
+      border: none;
+      padding: 0.6rem 1rem;
+      border-radius: 5px;
+      width: 100%;
+      cursor:pointer;
+      font-weight:600;
+      font-size: 1rem;
+      transition: background-color 0.3s;
+      margin-top: auto;
+    }
+    .product .info button:hover {
+      background: #005bb5;
+    }
+    /* 섹션 기본 스타일 */
+    .section {
+      background: #eef6ff;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin-top: 2rem;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    input[type=email], textarea, select, input[type=text], input[type=password] {
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 0.95rem;
+    }
+    button.subscribe {
+      background: #0070f3;
+      color: white;
+      border: none;
+      padding: 0.5rem;
+      border-radius: 5px;
+      cursor:pointer;
+      font-weight: 600;
+      transition: background-color 0.3s;
+    }
+    button.subscribe:hover {
+      background: #005bb5;
+    }
+    footer {
+      text-align: center;
+      font-size: 0.875rem;
+      color: gray;
+      margin-top: 2rem;
+      padding-bottom: 2rem;
+    }
+    /* 리뷰용 (스타) */
+    .stars { display:flex; gap:6px; align-items:center; }
+    .star { font-size:1.6rem; cursor:pointer; color:lightgray; user-select:none; transition: color 0.3s; }
+    .star.selected { color: gold; }
+    .review-list { margin-top: 1rem; display:flex; flex-direction:column; gap:0.6rem; }
+    .review-item { background:#fff;padding:.75rem;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,0.04); }
+    .meta{ font-size:0.85rem; color:gray; margin-bottom:0.4rem; }
+    .row { display:flex; gap:1rem; align-items:center; flex-wrap:wrap; }
+    .btn-ghost { background:transparent; border:1px solid #ddd; padding:.45rem .75rem; border-radius:6px; cursor:pointer; }
+    /* 홈 섹션 페이드인 */
+    .home-section {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+      margin-bottom: 3rem;
+
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 2rem;
+      box-sizing: border-box;
+    }
+    .home-section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    @media(max-width:900px){
+      .intro-section {
+        flex-direction: column;
+      }
+      .intro-text, .intro-image {
+        max-width: 100%;
+      }
+      .product img {
+        height: 220px;
+      }
+      .hero{
+        height: 240px;
+        font-size: 1.3rem;
+      }
+      .product {
+        min-height: 420px;
+      }
+      header, footer { padding-left: 0.8rem; padding-right: 0.8rem; }
+    }
+
+    /* 소셜 링크 */
+    .social-links {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+    .social-btn {
+      flex: 1;
+      text-align: center;
+      padding: 1rem 0;
+      border-radius: 8px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: white;
+      text-decoration: none;
+      user-select: none;
+      transition: background-color 0.3s ease;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      min-width: 140px;
+    }
+    .social-btn.instagram {
+      background: #E1306C; /* 인스타그램 핑크 */
+    }
+    .social-btn.instagram:hover {
+      background: #B62456;
+    }
+    .social-btn.blog {
+      background: #03C75A; /* 네이버 블로그 그린 */
+    }
+    .social-btn.blog:hover {
+      background: #029946;
+    }
+
+    /* 유튜브 섹션 */
+    .youtube-section {
+      text-align: center;
+    }
+    .youtube-iframe {
+      width: 100%;
+      max-width: 1000px;
+      height: 560px;
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+      margin-bottom: 1rem;
+    }
+    .btn-youtube {
+      background: #FF0000;
+      color: white;
+      border: none;
+      padding: 0.7rem 2.2rem;
+      font-size: 1.2rem;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: 700;
+      box-shadow: 0 3px 8px rgba(255,0,0,0.6);
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+    .btn-youtube:hover {
+      background: #cc0000;
+    }
+
+    /* Modal (로그인/회원가입) */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index: 200;
+    }
+    .modal {
+      width: 100%;
+      max-width: 480px;
+      background: #fff;
+      border-radius: 12px;
+      padding: 1.25rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    .modal h3 { margin-top: 0; }
+    .modal .row { flex-direction: column; align-items:stretch; }
+    .modal .actions { display:flex; gap:0.5rem; justify-content:flex-end; margin-top:0.5rem; }
+    .hidden { display:none !important; }
+
+    /* small helper */
+    .small { font-size:0.85rem; color:#666; }
+    .header-right { display:flex; gap:1rem; align-items:center; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <h1 id="logo">BATOO SOFA</h1>
+    <div style="display:flex; align-items:center; gap:1rem;">
+      <nav>
+        <a href="#home" class="nav-link">홈</a>
+        <!-- '제품' 버튼 will scroll to the products section on the home page -->
+        <a href="#products" id="nav-products" class="nav-link">제품</a>
+        <a href="#reviews" id="nav-reviews" class="nav-link">리뷰</a>
+        <a href="#contact" class="nav-link">연락처</a>
+      </nav>
+
+      <div class="header-right">
+        <div id="authArea" class="auth-controls">
+          <!-- JS will populate login/register or user info -->
+          <button id="btnLogin" class="btn-auth">로그인</button>
+          <button id="btnRegister" class="btn-auth">회원가입</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="hero" id="banner"><span>편안함의 기준, BATOO</span></div>
+
+<div class="container" id="main"></div>
+
+<footer>
+  © 2025 Batoo Sofa. All rights reserved.
+</footer>
+
+<!-- Modals (로그인 / 회원가입) -->
+<div id="modalBackdrop" class="modal-backdrop hidden" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" id="authModal">
+    <!-- content filled by JS -->
+  </div>
+</div>
+
+<script>
+  /* -----------------------------
+     데이터 / 상수
+     ----------------------------- */
+  const PRODUCTS = {
+    1: { id:1, name: "꾸오래", price: "₩1,000,000", img: "kkuore.jpg", desc: "고급 가죽과 견고한 프레임으로 제작된 클래식 라인의 프리미엄 소파입니다. 장시간 사용에도 편안함 유지." },
+    2: { id:2, name: "피오래", price: "₩1,100,000", img: "fiore.jpg", desc: "부드러운 패브릭 소재와 모던한 디자인의 조화. 공간을 밝게 만드는 컬러 옵션 제공." },
+    3: { id:3, name: "피오래-아이보리", price: "₩1,200,000", img: "fiore_ivory.jpg", desc: "넓은 좌석과 깊은 쿠션으로 휴식을 극대화한 모델. 가족 모두의 휴식 공간으로 적합합니다." },
+    4: { id:4, name: "미라클", price: "₩1,300,000", img: "miracle.jpg", desc: "미니멀한 라인과 뛰어난 내구성의 조합. 세련된 거실을 완성해 줍니다." }
+  };
+
+  const REVIEWS_KEY = 'batoo_reviews_v1';
+  const USERS_KEY = 'batoo_users_v1';
+  const CURRENT_USER_KEY = 'batoo_current_user_v1';
+
+  // variable used to request scrolling to a particular section after route renders
+  let pendingScrollTo = null;
+
+  /* -----------------------------
+     로컬스토리지 헬퍼 (리뷰/유저)
+     ----------------------------- */
+  function loadReviews() {
+    try {
+      return JSON.parse(localStorage.getItem(REVIEWS_KEY)) || [];
+    } catch(e) {
+      return [];
+    }
+  }
+
+  function saveReviews(list) {
+    localStorage.setItem(REVIEWS_KEY, JSON.stringify(list));
+  }
+
+  function loadUsers(){
+    try { return JSON.parse(localStorage.getItem(USERS_KEY)) || []; }
+    catch(e){ return []; }
+  }
+  function saveUsers(list){
+    localStorage.setItem(USERS_KEY, JSON.stringify(list));
+  }
+  function setCurrentUser(user){
+    if(user) localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
+    else localStorage.removeItem(CURRENT_USER_KEY);
+    renderAuthArea();
+  }
+  function getCurrentUser(){
+    try { return JSON.parse(localStorage.getItem(CURRENT_USER_KEY)) || null; }
+    catch(e){ return null; }
+  }
+
+  /* -----------------------------
+     비밀번호 해시 (Web Crypto API)
+     ----------------------------- */
+  async function hashPassword(password){
+    if(!window.crypto || !crypto.subtle) {
+      // fallback: not secure, but something
+      return btoa(password);
+    }
+    const enc = new TextEncoder();
+    const data = enc.encode(password);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+
+  /* -----------------------------
+     헤더/인증 UI 처리
+     ----------------------------- */
+  const authArea = document.getElementById('authArea');
+  function renderAuthArea(){
+    const user = getCurrentUser();
+    authArea.innerHTML = '';
+    if(user){
+      const nameEl = document.createElement('div');
+      nameEl.className = 'small';
+      nameEl.textContent = `${user.name}님 환영합니다`;
+      const btnLogout = document.createElement('button');
+      btnLogout.className = 'btn-auth';
+      btnLogout.textContent = '로그아웃';
+      btnLogout.addEventListener('click', () => {
+        setCurrentUser(null);
+        alert('로그아웃되었습니다.');
+        handleRoute(); // re-render if necessary
+      });
+      const btnProfile = document.createElement('button');
+      btnProfile.className = 'btn-auth btn-primary';
+      btnProfile.textContent = '마이페이지';
+      btnProfile.addEventListener('click', () => {
+        // 간단한 마이페이지(주문/리뷰 관리 등) - 여기선 리뷰만 필터링하여 보여줌
+        mainEl.innerHTML = `
+          <section class="section">
+            <h2>마이페이지 — ${escapeHtml(user.name)}</h2>
+            <p>등록된 리뷰를 확인하실 수 있습니다.</p>
+            <div id="myReviewsContainer"></div>
+            <div style="margin-top:1rem;">
+              <button id="btnBackToHome" class="btn-ghost">홈으로 돌아가기</button>
+            </div>
+          </section>
+        `;
+        document.getElementById('btnBackToHome').addEventListener('click', () => location.hash = '#home');
+        const myReviews = loadReviews().filter(r => r.email === user.email);
+        const cont = document.getElementById('myReviewsContainer');
+        if(myReviews.length === 0) cont.innerHTML = '<p>작성한 리뷰가 없습니다.</p>';
+        else cont.innerHTML = myReviews.map(r => `
+          <div class="review-item">
+            <div class="meta">${escapeHtml(r.name)} | ${new Date(r.date).toLocaleString()} | ${renderStarsStatic(r.rating)} | ${escapeHtml((PRODUCTS[r.productId] && PRODUCTS[r.productId].name) || '전체')}</div>
+            <div>${escapeHtml(r.comment)}</div>
+          </div>
+        `).join('');
+      });
+
+      authArea.appendChild(nameEl);
+      authArea.appendChild(btnProfile);
+      authArea.appendChild(btnLogout);
+    } else {
+      const btnLogin = document.createElement('button');
+      btnLogin.className = 'btn-auth';
+      btnLogin.id = 'btnLoginTop';
+      btnLogin.textContent = '로그인';
+      btnLogin.addEventListener('click', () => openAuthModal('login'));
+      const btnRegister = document.createElement('button');
+      btnRegister.className = 'btn-auth';
+      btnRegister.id = 'btnRegisterTop';
+      btnRegister.textContent = '회원가입';
+      btnRegister.addEventListener('click', () => openAuthModal('register'));
+      authArea.appendChild(btnLogin);
+      authArea.appendChild(btnRegister);
+    }
+  }
+
+  /* -----------------------------
+     모달 제어 (로그인/회원가입)
+     ----------------------------- */
+  const modalBackdrop = document.getElementById('modalBackdrop');
+  const authModal = document.getElementById('authModal');
+
+  function closeModal() {
+    modalBackdrop.classList.add('hidden');
+    authModal.innerHTML = '';
+  }
+
+  function openAuthModal(mode='login'){
+    // mode: 'login' or 'register'
+    modalBackdrop.classList.remove('hidden');
+    buildAuthModal(mode);
+  }
+
+  modalBackdrop.addEventListener('click', (e) => {
+    if(e.target === modalBackdrop) closeModal();
+  });
+
+  function buildAuthModal(mode){
+    if(mode === 'login'){
+      authModal.innerHTML = `
+        <h3>로그인</h3>
+        <form id="loginForm" class="row">
+          <input type="email" id="loginEmail" placeholder="이메일" required />
+          <input type="password" id="loginPassword" placeholder="비밀번호" required />
+          <div class="actions">
+            <button type="button" id="openRegisterFromLogin" class="btn-ghost">회원가입</button>
+            <button type="submit" class="btn-primary btn-auth">로그인</button>
+            <button type="button" id="closeModalBtn" class="btn-auth">취소</button>
+          </div>
+        </form>
+      `;
+      document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+      document.getElementById('openRegisterFromLogin').addEventListener('click', () => buildAuthModal('register'));
+      document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+        const password = document.getElementById('loginPassword').value;
+        if(!email || !password){ alert('이메일과 비밀번호를 입력하세요.'); return; }
+        const users = loadUsers();
+        const user = users.find(u => u.email === email);
+        if(!user){ alert('등록되지 않은 이메일입니다. 회원가입 해주세요.'); return; }
+        const hashed = await hashPassword(password);
+        if(hashed !== user.passHash){ alert('비밀번호가 올바르지 않습니다.'); return; }
+        // 로그인 성공
+        setCurrentUser({ email: user.email, name: user.name });
+        alert(`${user.name}님 환영합니다.`);
+        closeModal();
+        // if there was pending scroll etc, trigger route to re-render forms with name
+        handleRoute();
+      });
+    } else {
+      authModal.innerHTML = `
+        <h3>회원가입</h3>
+        <form id="registerForm" class="row">
+          <input type="text" id="registerName" placeholder="이름" required />
+          <input type="email" id="registerEmail" placeholder="이메일" required />
+          <input type="password" id="registerPassword" placeholder="비밀번호 (6자 이상)" required />
+          <input type="password" id="registerPassword2" placeholder="비밀번호 확인" required />
+          <div class="actions">
+            <button type="button" id="openLoginFromRegister" class="btn-ghost">로그인</button>
+            <button type="submit" class="btn-primary btn-auth">회원가입</button>
+            <button type="button" id="closeModalBtn2" class="btn-auth">취소</button>
+          </div>
+        </form>
+      `;
+      document.getElementById('closeModalBtn2').addEventListener('click', closeModal);
+      document.getElementById('openLoginFromRegister').addEventListener('click', () => buildAuthModal('login'));
+      document.getElementById('registerForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const name = document.getElementById('registerName').value.trim();
+        const email = document.getElementById('registerEmail').value.trim().toLowerCase();
+        const pw = document.getElementById('registerPassword').value;
+        const pw2 = document.getElementById('registerPassword2').value;
+        if(!name || !email || !pw){ alert('필수 항목을 모두 입력하세요.'); return; }
+        if(pw.length < 6){ alert('비밀번호는 6자 이상이어야 합니다.'); return; }
+        if(pw !== pw2){ alert('비밀번호와 확인이 일치하지 않습니다.'); return; }
+        const users = loadUsers();
+        if(users.some(u => u.email === email)){ alert('이미 등록된 이메일입니다.'); return; }
+        const passHash = await hashPassword(pw);
+        users.push({ name, email, passHash, created: new Date().toISOString() });
+        saveUsers(users);
+        alert('회원가입이 완료되었습니다. 로그인해 주세요.');
+        buildAuthModal('login');
+      });
+    }
+  }
+
+  /* -----------------------------
+     UI 템플릿 생성 함수들 (기존 코드 기반)
+     ----------------------------- */
+  const mainEl = document.getElementById('main');
+
+  function getHomeHTML(){
+    return `
+      <section class="home-section intro-section">
+        <div class="intro-text">
+          <h2>바투 소파 소개</h2>
+          <p>37년 장인의 손길이 담긴 최고의 소파 브랜드, 바투 소파입니다. 편안함과 디자인을 모두 만족시키는 제품을 제공합니다.</p>
+        </div>
+        <div class="intro-image">
+          <img src="intro.jpg" alt="바투 소파 매장 사진" />
+        </div>
+      </section>
+
+      <section class="home-section" id="products-list">
+        <h2>제품 소개</h2>
+        <div class="products">
+          ${Object.values(PRODUCTS).map(p => `
+            <div class="product">
+              <img src="${escapeHtml(p.img)}" alt="${escapeHtml(p.name)}" />
+              <div class="info">
+                <h4>${escapeHtml(p.name)}</h4>
+                <p>${p.price}</p>
+                <button data-id="${p.id}" class="btn-detail">자세히 보기</button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </section>
+
+      <section class="home-section youtube-section">
+        <h2>유튜브 소개</h2>
+        <!-- 유튜브 영상은 로컬 파일에서 제대로 안 나올 수 있으니 웹 서버에서 열기를 권장합니다 -->
+        <iframe class="youtube-iframe" src="https://www.youtube.com/embed/gOn-i7L6swU" allowfullscreen></iframe>
+        <button class="btn-youtube" id="youtubeBtn">유튜브 채널 바로가기</button>
+      </section>
+
+      <section class="home-section">
+        <h2>인스타그램 & 블로그</h2>
+        <div class="social-links">
+          <a href="https://www.instagram.com/batoosofa/" target="_blank" rel="noopener noreferrer" class="social-btn instagram">
+            📷 Instagram
+          </a>
+          <a href="https://blog.naver.com/sofaman40y" target="_blank" rel="noopener noreferrer" class="social-btn blog">
+            📝 Blog
+          </a>
+        </div>
+      </section>
+
+      <section class="home-section">
+        <h2>사업자 정보</h2>
+        <p>상호명: 바투 소파</p>
+        <p>대표자: 신행수</p>
+        <p>사업자등록번호: 123-45-67890</p>
+        <p>주소: 서울시 강남구 ...</p>
+        <p>전화: 010-1234-5678</p>
+      </section>
+    `;
+  }
+
+  function getProductsPageHTML(){
+    return `
+      <section class="home-section" id="products-list">
+        <h2>제품 목록</h2>
+        <div class="products">
+          ${Object.values(PRODUCTS).map(p => `
+            <div class="product">
+              <img src="${escapeHtml(p.img)}" alt="${escapeHtml(p.name)}" />
+              <div class="info">
+                <h4>${escapeHtml(p.name)}</h4>
+                <p>${p.price}</p>
+                <button data-id="${p.id}" class="btn-detail">자세히 보기</button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </section>
+    `;
+  }
+
+  // 통합 리뷰 리스트 (모든 제품의 리뷰를 보여줌)
+  function getReviewsHTML() {
+    const reviews = loadReviews();
+    if (reviews.length === 0) {
+      return `<p>등록된 리뷰가 없습니다.</p>`;
+    }
+    return `
+      <div class="review-list">
+        ${reviews.map(r => `
+          <div class="review-item">
+            <div class="meta">${escapeHtml(r.name)} | ${new Date(r.date).toLocaleString()} | ${renderStarsStatic(r.rating)} | ${escapeHtml((PRODUCTS[r.productId] && PRODUCTS[r.productId].name) || '상품 없음')}</div>
+            <div>${escapeHtml(r.comment)}</div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  // 리뷰 입력 폼 (productId가 있으면 그 상품에 대한 리뷰 작성폼, 없으면 글로벌 폼)
+  function getReviewFormHTML(productId){
+    const containerId = productId ? `starContainer-${productId}` : 'starContainer-global';
+    const user = getCurrentUser();
+    const nameValue = user ? escapeHtml(user.name) : '';
+    const nameReadonly = user ? 'readonly' : '';
+    return `
+      <section class="section review-form-section">
+        <h3>리뷰 작성${productId ? ' — ' + escapeHtml(PRODUCTS[productId].name) : ''}</h3>
+        <form id="reviewForm-${productId || 'global'}" data-product="${productId || ''}">
+          <input type="text" id="reviewName-${productId || 'global'}" placeholder="이름" value="${nameValue}" ${nameReadonly} required />
+          <div class="stars" id="${containerId}">
+            ${[1,2,3,4,5].map(i => `<span class="star" data-value="${i}">&#9733;</span>`).join('')}
+          </div>
+          <textarea id="reviewComment-${productId || 'global'}" rows="4" placeholder="리뷰 내용을 입력하세요." required></textarea>
+          <button type="submit" class="subscribe">리뷰 등록 (로그인 필요)</button>
+        </form>
+      </section>
+    `;
+  }
+
+  // 별 점수 출력 (읽기용)
+  function renderStarsStatic(rating) {
+    let starsHTML = '';
+    for(let i=1; i<=5; i++) {
+      starsHTML += `<span class="star${i <= rating ? ' selected' : ''}">&#9733;</span>`;
+    }
+    return starsHTML;
+  }
+
+  // 스타 UI 세팅: containerId 문자열을 넘기면 그 컨테이너 내의 별들에 클릭 이벤트 연결
+  function setupStarRating(containerId){
+    const container = document.getElementById(containerId);
+    if(!container) return () => 0;
+    const stars = Array.from(container.querySelectorAll('.star'));
+    let currentRating = 0;
+    stars.forEach(s => s.classList.remove('selected'));
+    stars.forEach(star => {
+      star.addEventListener('click', () => {
+        currentRating = Number(star.dataset.value);
+        stars.forEach(s => s.classList.toggle('selected', Number(s.dataset.value) <= currentRating));
+      });
+    });
+    return () => currentRating; // 반환: 현재 선택된 값 읽는 함수
+  }
+
+  // 상세 페이지 렌더링 (상품별 리뷰 작성/보기 가능)
+  function renderProductDetail(id){
+    const p = PRODUCTS[id];
+    if(!p){
+      mainEl.innerHTML = '<p>제품을 찾을 수 없습니다.</p>';
+      return;
+    }
+    const productReviews = loadReviews().filter(r => Number(r.productId) === Number(id));
+    mainEl.innerHTML = `
+      <section class="section">
+        <h2>${escapeHtml(p.name)}</h2>
+        <img src="${escapeHtml(p.img)}" alt="${escapeHtml(p.name)}" style="width:100%; max-width:600px; border-radius: 15px; box-shadow: 0 6px 15px rgba(0,0,0,0.15);"/>
+        <p style="margin-top:1rem; font-size:1.1rem; line-height:1.5;">${escapeHtml(p.desc)}</p>
+        <div style="margin-top:1rem;">
+          <button id="btnBack" class="btn-ghost">목록으로 돌아가기</button>
+        </div>
+
+        <div style="margin-top:1.5rem;">
+          <h3>이 상품의 리뷰</h3>
+          ${productReviews.length ? productReviews.map(r => `
+            <div class="review-item">
+              <div class="meta">${escapeHtml(r.name)} | ${new Date(r.date).toLocaleString()} | ${renderStarsStatic(r.rating)}</div>
+              <div>${escapeHtml(r.comment)}</div>
+            </div>
+          `).join('') : '<p>등록된 리뷰가 없습니다.</p>'}
+        </div>
+
+        ${getReviewFormHTML(id)}
+      </section>
+    `;
+
+    // 뒤로가기: 홈으로 이동 (요구사항 3)
+    const backBtn = document.getElementById('btnBack');
+    if(backBtn) backBtn.addEventListener('click', () => {
+      location.hash = '#home';
+    });
+
+    // 스타 세팅 (product-specific)
+    const getRating = setupStarRating(`starContainer-${id}`);
+
+    // 리뷰 폼 제출 처리 (product-specific)
+    const form = document.getElementById(`reviewForm-${id}`);
+    if(form){
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const currentUser = getCurrentUser();
+        if(!currentUser){
+          if(confirm('리뷰 등록은 로그인 후에 가능합니다. 로그인 하시겠습니까?')) openAuthModal('login');
+          return;
+        }
+        const nameInput = document.getElementById(`reviewName-${id}`);
+        const commentInput = document.getElementById(`reviewComment-${id}`);
+        const name = (nameInput && nameInput.value.trim()) || '';
+        const comment = (commentInput && commentInput.value.trim()) || '';
+        const rating = typeof getRating === 'function' ? getRating() : 0;
+        if(!name || !comment){ alert('이름과 내용을 입력해주세요.'); return; }
+        if(!rating || rating === 0){ alert('별점을 선택해주세요.'); return; }
+        const reviews = loadReviews();
+        reviews.unshift({ name, comment, rating, date: new Date().toISOString(), productId: Number(id), email: currentUser.email });
+        saveReviews(reviews);
+        alert('리뷰가 등록되었습니다.');
+        // 재렌더링: 동일 상품 상세로 돌아감
+        renderProductDetail(id);
+      });
+    }
+  }
+
+  // 리뷰 페이지 렌더링 (통합된 창으로 모든 리뷰를 한눈에)
+  function renderReviewsPage() {
+    mainEl.innerHTML = `
+      <section>
+        <h2>고객 리뷰 (전체)</h2>
+        ${getReviewsHTML()}
+        ${getReviewFormHTML()} <!-- 글로벌 리뷰 폼 (제품 선택 없이 등록 가능) -->
+      </section>
+    `;
+
+    // 스타 세팅 (global)
+    const getRating = setupStarRating('starContainer-global');
+
+    const form = document.getElementById('reviewForm-global');
+    if(form){
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const currentUser = getCurrentUser();
+        if(!currentUser){
+          if(confirm('리뷰 등록은 로그인 후에 가능합니다. 로그인 하시겠습니까?')) openAuthModal('login');
+          return;
+        }
+        const name = document.getElementById('reviewName-global').value.trim();
+        const comment = document.getElementById('reviewComment-global').value.trim();
+        const rating = typeof getRating === 'function' ? getRating() : 0;
+        if(!name || !comment){ alert('이름과 내용을 입력해주세요.'); return; }
+        if(!rating || rating === 0){ alert('별점을 선택해주세요.'); return; }
+        const reviews = loadReviews();
+        reviews.unshift({ name, comment, rating, date: new Date().toISOString(), productId: null, email: currentUser.email });
+        saveReviews(reviews);
+        alert('리뷰가 등록되었습니다.');
+        renderReviewsPage();
+      });
+    }
+  }
+
+  // 연락처 페이지 간단히
+  function renderContact() {
+    mainEl.innerHTML = `
+      <section class="section">
+        <h2>연락처</h2>
+        <p>이메일: contact@batoosofa.com</p>
+        <p>전화번호: 010-1234-5678</p>
+        <p>주소: 서울시 강남구 ...</p>
+      </section>
+    `;
+  }
+
+  // HTML 이스케이프 함수
+  function escapeHtml(text) {
+    if (text === undefined || text === null) return '';
+    return String(text).replace(/[&<>"']/g, function (m) {
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];
+    });
+  }
+
+  // 라우팅 처리
+  function handleRoute() {
+    const hash = location.hash || '#home';
+
+    // 네비 active 표시 초기화
+    document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+
+    if (hash === '#home') {
+      mainEl.innerHTML = getHomeHTML();
+      const homeNav = document.querySelector('nav a[href="#home"]');
+      if(homeNav) homeNav.classList.add('active');
+
+      // 제품 상세보기 버튼 이벤트 연결
+      document.querySelectorAll('.btn-detail').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.id;
+          location.hash = `#product-${id}`;
+        });
+      });
+
+      // 유튜브 버튼
+      const ybtn = document.getElementById('youtubeBtn');
+      if(ybtn) ybtn.addEventListener('click', () => {
+        window.open('https://www.youtube.com/channel/UCglzlObuRKTSHlOmI83potA', '_blank');
+      });
+
+      setupFadeIn();
+
+      // 만약 pendingScrollTo이 설정되어 있으면 해당 엘리먼트로 스크롤
+      if(pendingScrollTo){
+        setTimeout(() => {
+          const el = document.getElementById(pendingScrollTo);
+          if(el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          pendingScrollTo = null;
+        }, 150); // 렌더 후 스크롤
+      }
+
+    } else if (hash === '#products') {
+      // 사용자가 '#products'로 바로 들어왔을 때 홈의 제품 섹션으로 스크롤하도록 변경 요구사항 반영
+      // 홈 화면을 먼저 렌더링하고 제품 섹션으로 스크롤
+      pendingScrollTo = 'products-list';
+      location.hash = '#home';
+
+    } else if (hash.startsWith('#product-')) {
+      const id = hash.split('-')[1];
+      renderProductDetail(id);
+
+    } else if (hash === '#reviews') {
+      renderReviewsPage();
+      const revNav = document.querySelector('nav a[href="#reviews"]');
+      if(revNav) revNav.classList.add('active');
+
+    } else if (hash === '#contact') {
+      renderContact();
+      const contNav = document.querySelector('nav a[href="#contact"]');
+      if(contNav) contNav.classList.add('active');
+
+    } else {
+      mainEl.innerHTML = '<p>페이지를 찾을 수 없습니다.</p>';
+    }
+
+    // set auth area (로그인 여부에 따라)
+    renderAuthArea();
+
+    // attach product nav click behavior: when clicking header's '제품' button, we want to go to the products section in 홈
+    // ensure the nav item exists
+    const navProducts = document.getElementById('nav-products');
+    if(navProducts){
+      navProducts.removeEventListener('click', productNavHandler);
+      navProducts.addEventListener('click', productNavHandler);
+    }
+
+    // attach logo click
+    const logo = document.getElementById('logo');
+    if(logo){
+      logo.removeEventListener('click', logoClickHandler);
+      logo.addEventListener('click', logoClickHandler);
+    }
+
+    // attach .btn-detail events (for dynamic pages too)
+    document.querySelectorAll('.btn-detail').forEach(btn => {
+      btn.removeEventListener('click', btnDetailHandler);
+      btn.addEventListener('click', btnDetailHandler);
+    });
+  }
+
+  function btnDetailHandler(e){
+    const id = e.currentTarget.dataset.id;
+    if(id) location.hash = `#product-${id}`;
+  }
+  function logoClickHandler(){ location.hash = '#home'; }
+
+  function productNavHandler(e){
+    e.preventDefault();
+    // if currently on home, scroll to products-list directly
+    if(location.hash === '#home' || location.hash === '' || location.hash === '#'){
+      const el = document.getElementById('products-list');
+      if(el){
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        // fallback: request a scroll after render
+        pendingScrollTo = 'products-list';
+        location.hash = '#home';
+      }
+    } else {
+      // set pending flag so after home renders we scroll
+      pendingScrollTo = 'products-list';
+      location.hash = '#home';
+    }
+  }
+
+  function setupFadeIn(){
+    const sections = document.querySelectorAll('.home-section');
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          entry.target.classList.add('visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, {threshold: 0.3});
+    sections.forEach(s => io.observe(s));
+  }
+
+  // 초기 이벤트 연결
+  window.addEventListener('hashchange', handleRoute);
+  window.addEventListener('load', () => {
+    // 초기 render
+    handleRoute();
+
+    // If user directly opened '#products' before load, ensure redirect
+    if(location.hash === '#products'){
+      pendingScrollTo = 'products-list';
+      location.hash = '#home';
+    }
+
+    // attach initial buttons in header (signup/login)
+    // (renderAuthArea will attach listeners; but ensure first-time buttons also)
+    const btnLogin = document.getElementById('btnLogin');
+    const btnReg = document.getElementById('btnRegister');
+    if(btnLogin) btnLogin.addEventListener('click', () => openAuthModal('login'));
+    if(btnReg) btnReg.addEventListener('click', () => openAuthModal('register'));
+
+    // Close modal on ESC
+    document.addEventListener('keydown', (e) => {
+      if(e.key === 'Escape') closeModal();
+    });
+  });
+
+  /* -----------------------------
+     추가 유틸리티 (안전한 텍스트 렌더링 등)
+     ----------------------------- */
+  // 기존 함수 renderStarsStatic, escapeHtml 이미 정의 above
+
+  // ensure nav active state is set when clicking nav links
+  document.addEventListener('click', (e) => {
+    if(e.target.matches('nav a.nav-link')){
+      // let the hashchange handler deal with rendering; but we can mark active
+      setTimeout(() => {
+        document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+        const a = e.target;
+        if(a) a.classList.add('active');
+      }, 20);
+    }
+  });
+
+  // Expose a couple helpers for debugging if needed (not required)
+  window._batoo = {
+    loadUsers, saveUsers, loadReviews, saveReviews, getCurrentUser
+  };
+
+  // render auth area immediately
+  renderAuthArea();
+
+</script>
+
+</body>
+</html>
